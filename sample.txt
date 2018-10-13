@@ -1,0 +1,6 @@
+x = 1 + 2 + 3;
+PRINT x;
+y = x + 4;
+PRINT y;
+z = y + 5 + x;
+PRINT z;
