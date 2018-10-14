@@ -22,6 +22,5 @@ Recommented order of read is:
    ```haskell
    data Statement = Assign VarName Expression
                   | Print Expression
-                  | If Expression Program
                   | Loop Expression Program
    ```
