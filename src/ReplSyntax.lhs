@@ -48,8 +48,7 @@ Here let me mimic the GHCi command.
 > helpMessage :: String
 > helpMessage = unlines
 >   [ "REPL command syntax:"
->   , "    <VarName> = <Expression>"
->   , "    PRINT <Expression>"
+>   , "    <Statement>"
 >   , "    <Expression>"
 >   , "    :load <FilePath>"
 >   , "    :help"

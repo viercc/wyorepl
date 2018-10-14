@@ -60,6 +60,7 @@ structured.
 
 > data Statement = Assign VarName Expression
 >                | Print Expression
+>                | Loop Expression Program
 >     deriving (Show, Read, Eq, Ord)
 
  A program is simply a sequence of <Statement>s.
@@ -102,6 +103,13 @@ easy. (You can skip all of them if you feel they're trivial.)
 >   do n <- evalExpression env expr
 >      liftIO $ print n
 >      return env
+> runStatement env (Loop count body) =
+>   do n <- evalExpression env count
+>      loop n env
+>   where
+>     loop n env'
+>       | n <= 0    = return env'
+>       | otherwise = runProgram env' body >>= loop (n-1)
 
  Interpreting a program is interpreting all its statements,
 while accumulating each changes to `Env`. That's `foldM`.

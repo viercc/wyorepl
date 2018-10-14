@@ -73,6 +73,9 @@ Megaparsec (parser combinator library) in detail.
 > statementP =
 >       Assign <$> varNameP <* symbol "=" <*> expressionP
 >   <|> Print <$ symbol "PRINT" <*> expressionP
+>   <|> Loop <$ symbol "LOOP" <*> expressionP
+>            <* symbol "DO" <*> programP
+>            <* symbol "END"
 > 
 > programP :: Parser Program
 > programP = sepEndBy1 statementP (symbol ";")
