@@ -21,8 +21,8 @@ executable wyorepl
   other-modules:       Language, Parser, Repl, ReplSyntax
   default-language:    Haskell2010
   build-depends:       base >= 4.9 && < 5
-                     , containers
-                     , mtl
-                     , megaparsec
-                     , haskeline
+                     , containers >=0.5
+                     , mtl        >=2.2
+                     , megaparsec >=6.0 && <7.0
+                     , haskeline  >=0.7
   ghc-options:         -Wall -Werror
