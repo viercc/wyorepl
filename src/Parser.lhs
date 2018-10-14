@@ -1,5 +1,5 @@
  This module implements various parsers needed to parse our language from
-text. You can skip to read this module if you know how parsing works well.
+text.
 
 > module Parser where
 
@@ -16,15 +16,15 @@ the necessary modules.
 > import qualified Text.Megaparsec.Char.Lexer as L
 > 
 > import           Control.Exception
-> import           System.IO
 
-This module provides a parser for our Expression, Statement, and Program type,
+ This module provides a parser for our Expression, Statement, and Program type,
 so we import it.
 
 > import           Language
 
  Preparing necessary building blocks. The type alias `Parser` is the type of
-a parser (heh) and `Parser SomeType` means it's a parser which 
+a parser (heh). `Parser SomeType` means it's a parser which yields a value of
+`SomeType` if it succeeds.
 
 > -- Prepare building blocks
 > 
@@ -48,7 +48,7 @@ a parser (heh) and `Parser SomeType` means it's a parser which
 > parens :: Parser a -> Parser a
 > parens = between (symbol "(") (symbol ")")
 
-Then define the syntax of our language. I don't explain how we're using
+ Then define the syntax of our language. I don't explain how we're using
 Megaparsec (parser combinator library) in detail.
 
 > -- Expression, Statement, Program
@@ -77,7 +77,7 @@ Megaparsec (parser combinator library) in detail.
 > programP :: Parser Program
 > programP = sepEndBy1 statementP (symbol ";")
 
-We provide the way to apply a parser on a file here.
+ We provide the way to apply a parser on a file here.
 
 > -- Running parser
 > parseFile :: Parser a -> FilePath -> IO (Either String a)
@@ -87,8 +87,11 @@ We provide the way to apply a parser on a file here.
 >        let result = case parse (space *> p <* eof) filePath src of
 >                       Left e  -> Left $ parseErrorPretty e
 >                       Right a -> Right a
+>        -- Due to lazy IO, if IOException is thrown while reading file,
+>        -- the time it happens is when we run parser.
+>        -- To ensure IOException is catched, we evaluate the result of
+>        -- parsing to WHNF before exitting this block.
 >        evaluate result
->        return result
 >   where
 >     showIOException :: IOException -> String
 >     showIOException = show

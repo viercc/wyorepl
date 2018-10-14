@@ -15,6 +15,7 @@ REPL. You may want to read other modules first.
 
 > import           Control.Monad.Except
 > import           Control.Monad.State
+> import           System.Console.Haskeline
 
  There's `System.Console.Haskeline` which is from haskeline package. That package
 provides nifty way to interact with user by reading user inputs line by line,
@@ -25,8 +26,6 @@ implementation of input history (that feature which gives you previous input whe
 you hit ↑ key). They are very important for pleasant console UI of your REPL,
 but hard to implement correctly.
 
-> import           System.Console.Haskeline
-
  Importing types and functions we prepared, we can start the implementation.
 
 > import           Language
@@ -36,11 +35,19 @@ but hard to implement correctly.
  First, we define a `Repl` Monad be `StateT` over `InputT IO`. `InputT` is a
 monad transformer provided by haskeline, which provides all functionalities of
 haskeline.
- `StateT` part carries the state of the interpreter, `Env`. For your actual
-language, this can contain more than the state of interpreter, like which file
-an user is currently focusing, what an user specified for how prompt looks, etc.
 
 > type Repl = StateT Env (InputT IO)
+
+ `StateT` part carries the state of the interpreter, `Env`. For your actual
+language, this can contain more than the state of the interpreter.
+ For example, if you want to implement ":reload" command which reloads a source
+file loaded last time, you have to remember which file is loaded. Since you need
+something like
+
+    data ReplState = ReplState{ interpreterEnv :: Env
+                              , lastFileLoaded :: Maybe FilePath }
+
+    type Repl = StateT ReplState (InputT IO)
 
  Here defines the way to run `Repl` as bare `IO`. `runInputT` is the method to
 run `InputT`,
@@ -117,22 +124,23 @@ no-op.
  What is the next? Ctrl-C! This is not needed in our example actually, but
 I want it to be included in this tutorial.
 
- Generally speaking, there is a chance the command user typed took very long
+ Generally speaking, there is a chance the command user typed takes very long
 time to execute, or not even terminates. When an user ran into it, you probably
-want he/she be able to interrupt the action - by typing Ctrl-C.
+want he/she be able to interrupt the action by typing Ctrl-C.
  haskeline supports it.
 
     withInterrupt :: (MonadException m) => InputT m a -> InputT m a
     handleInterrupt :: MonadException m => m a -> m a -> m a 
 
- During the action surrounded by `withInterrupt`, when user puts Ctrl-C, the
-exception named Interrupt is thrown instead of aborting the entire program.
+ During the action surrounded by `withInterrupt`, when an user types Ctrl-C,
+the exception named Interrupt is thrown instead of aborting the entire program.
 `handleInterrupt` sets up exception handler for the Interrupt exception.
-And yes, `InputT` is also `MonadException`.
+And yes, `InputT IO` is also `MonadException`.
 
+    instance MonadException IO
     instance MonadException m => MonadException (InputT m)
 
- Combining this two functions, you can easily write interruptable action.
+ Combining these two functions, you can easily write interruptable action.
 But, this is defined for `InputT` only. Our `Repl` Monad was `StateT` over
 `InputT`. So, we prepare a wrapper function for `Repl` here.
 
@@ -149,7 +157,7 @@ But, this is defined for `InputT` only. Our `Repl` Monad was `StateT` over
 > handleCommand :: ReplCommand -> Repl()
 > handleCommand = interruptably . handleCommand'
 
- Finally, main loop which accepts user input and execute the command.
+ Finally, the main loop which accepts user input and execute the command.
 
 > repl :: Repl ()
 > repl =

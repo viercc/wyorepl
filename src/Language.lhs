@@ -1,14 +1,13 @@
  To start demonstrating how to write REPL, we must build it on top of an
-interpreter of a programming language.
-This module provides very small toy programming language for the purpose of
-being example.
+interpreter of a programming language. This module provides very small toy
+programming language for the purpose of being example.
 
- This programming language is like very limited form of BASIC. It only has two
-statements. One is PRINT statement.
+ This programming language is like a very limited form of BASIC. It only has two
+statements. One is PRINT statement. It prints out the value of <Expression> when
+executed.
 
     PRINT <Expression>
-
- PRINT statements prints out the value of <Expression> when executed.
+ 
 Another statement is assignment statement.
 
     <VarName> = <Expression>
@@ -121,4 +120,5 @@ Let's test this module. On GHCi:
     4
     Right (fromList [("x",4)])
 
-Looks okay. Go to Parser.lhs which implements the parser for our language.
+Looks okay. Let's go to Parser.lhs to see the implementation of the parser for
+our language.

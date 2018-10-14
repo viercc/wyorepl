@@ -1,5 +1,5 @@
   Finally, we reached the main topic: how to implement REPL.
-The first thing we do is defining syntaxes of REPL-specific commands.
+The first thing we do is defining a syntax of REPL commands.
 Here let me mimic the GHCi command.
 
 > module ReplSyntax(
@@ -15,11 +15,11 @@ Here let me mimic the GHCi command.
 
  Our REPL command is either:
 
-    A <Statement> to execute
-    An <Expression> to evaluate and print it
-    A command to load a file and run it
-    A command to print help message
-    A command to exit the REPL
+    <Statement>    A <Statement> to execute
+    <Expression>   An <Expression> to evaluate and print it
+    :load "File"   A command to load a file and run it
+    :help          A command to print help message
+    :quit          A command to exit the REPL
 
 > data ReplCommand =
 >     Run Statement

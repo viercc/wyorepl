@@ -1,6 +1,6 @@
  This module is the Main module, meaning it handles command line arguments,
-invoking interpreter, etc. Luckily our programming language is tiny, so there's
-not much of things to configure through command line.
+invokes interpreter, etc. Luckily our programming language is tiny, so there's
+not much of complexity.
 
 > module Main(main) where
 > 
@@ -48,7 +48,6 @@ if you do it for more than three arguments.
 >     parseArgs' _   _ = Nothing
 
  Interpreting a file. Parse a file first, then `runProgram` the result.
-It's simple!
 
 > interpret :: Maybe FilePath -> IO ()
 > interpret Nothing = printUsage
@@ -64,7 +63,7 @@ It's simple!
 > printUsage = putStrLn "wyorepl [-i] [FILE]"
 
  Finally, the function to jump to the implementation of REPL.
-Look it back after you read ReplSyntax.lhs, then Repl.lhs .
+Look it back after you read ReplSyntax.lhs and Repl.lhs .
 
 > interactive :: Maybe FilePath -> IO ()
 > interactive mayFilePath = runRepl $
