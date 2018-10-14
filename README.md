@@ -13,6 +13,34 @@ Recommented order of read is:
 * [Repl](src/Repl.lhs)
 * [Main](src/Main.lhs) again
 
+## How to build and run
+
+### For stack user
+
+   To compile,
+   ```
+   $ stack build
+   ```
+   
+   To run the REPL,
+   ```
+   $ stack exec -- wyorepl -i
+   ```
+
+### For cabal user
+
+   To compile,
+   ```
+   $ cabal new-build
+   ```
+   
+   To run the REPL,
+   ```
+   $ cabal new-exec -- wyorepl -i
+   ```
+   
+   I checked it compiles for: ghc-8.0.2, ghc-8.2.2, ghc-8.4.3, ghc-8.6.1
+
 ## Exercise
 
  * Implement LOOP statement which loops enclosing statements specified times.
@@ -22,6 +50,5 @@ Recommented order of read is:
    ```haskell
    data Statement = Assign VarName Expression
                   | Print Expression
-                  | If Expression Program
                   | Loop Expression Program
    ```
